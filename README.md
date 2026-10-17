@@ -208,5 +208,10 @@ RoadSense is a prototype for demonstrating road-risk monitoring and mobility-rel
 
 GitHub: https://github.com/yasaswinibaliboyina-crypto/RoadSense
 
+## 📸 Prototype Screenshot
+
+![RoadSense Dashboard](screenshots/dashboard.png)
+
+
 
 
