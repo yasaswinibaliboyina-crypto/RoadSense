@@ -1,0 +1,2 @@
+location_name,highway,road_type,lanes,junction,street_lighting,night_visibility,headlight_glare_risk,speed_limit_kmph,pedestrian_area,traffic_density
+Guntur Y-Junction,NH-16,Divided National Highway,6,Y-Junction,,,,60,yes,medium

@@ -1,0 +1,2 @@
+location_name,district,state,highway,black_spot,risk_zone_length_m,risk_level,accident_count,fatality_count,source_year,source_type
+Guntur Y-Junction,Guntur,Andhra Pradesh,NH-16,Yes,300,HIGH,64,29,2019,Government of India

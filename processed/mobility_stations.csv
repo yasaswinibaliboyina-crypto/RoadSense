@@ -1,0 +1,11 @@
+station_name,station_type,latitude,longitude,connector_type,power_kw,location_note
+IOCL NH-16 Charger,EV,16.269778,80.466302,LEV AC,3.3,Near Ankireddypalem Y-Junction
+Ather Kothapet,EV,16.296253,80.449571,LEV DC,3.3,Kothapet Guntur
+Ather Sitaram Nagar,EV,16.304814,80.461698,LEV DC,3.3,Near Padmaja Petrol Bunk
+Ather Gorantla,EV,16.329035,80.438296,LEV DC,3.3,Gorantla Guntur
+Ather Kaza Toll Plaza,EV,16.388414,80.535797,LEV DC,3.3,Kaza NH-16
+Sri Padmavathi Filling Station,PETROL,,,NA,NA,Autonagar Agatha Varappadu
+P S Rao Fuel Products,PETROL,,,NA,NA,Autonagar Guntur
+Jio-bp Gaddipadu,PETROL,,,NA,NA,Mangalagiri Road Gaddipadu
+IndianOil Sitaram Nagar,PETROL,,,NA,NA,Kakani Road Sitaram Nagar
+HP M Chadalavada Oil Corporation,PETROL,,,NA,NA,Agatha Varappadu near Pedakakani

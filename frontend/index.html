@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoadSense | Driver Command Center</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">R</div>
+            <div>
+                <h2>RoadSense</h2>
+                <small>DRIVER COMMAND CENTER</small>
+            </div>
+        </div>
+
+        <div class="side-label">MAIN MENU</div>
+        <nav class="nav-wrap">
+            <button class="nav active" data-page="overview">⌂ <span>Overview</span></button>
+            <button class="nav" data-page="safety">⚠ <span>Safety Measures</span></button>
+            <button class="nav" data-page="map-page">⌖ <span>Safety Map</span></button>
+            <button class="nav" data-page="ev-page">ϟ <span>EV Stations</span></button>
+            <button class="nav" data-page="petrol-page">⛽ <span>Petrol Stations</span></button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <span class="status-dot"></span> Prototype system
+            <small>Guntur, Andhra Pradesh</small>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <div class="eyebrow">ROAD SAFETY INTELLIGENCE</div>
+                <h1 id="page-title">Overview</h1>
+            </div>
+            <div class="location-chip">⌖ Guntur Y-Junction · NH-16</div>
+        </header>
+
+        <!-- OVERVIEW -->
+        <section class="page active" id="overview">
+            <div class="hero">
+                <div class="hero-copy">
+                    <span class="pill teal">ROAD AWARENESS SYSTEM</span>
+                    <h2>Know the risk<br>before you reach it.</h2>
+                    <p>RoadSense combines vehicle detection, road-condition indicators and a machine-learning prototype to help drivers anticipate potential hazards.</p>
+                    <button class="primary-btn" data-goto="safety">Check road safety →</button>
+                </div>
+                <div class="hero-symbol">
+                    <div class="radar-ring ring-one"></div>
+                    <div class="radar-ring ring-two"></div>
+                    <div class="radar-ring ring-three"></div>
+                    <div class="radar-center">R</div>
+                    <span class="radar-label">ROAD<br>MONITOR</span>
+                </div>
+            </div>
+
+            
+<div class="video-panel">
+    <div class="video-panel-header">
+        <div>
+            <span class="pill teal">AI VISION</span>
+            <h2>Road Detection Demo</h2>
+            <p>YOLO vehicle detection on recorded road footage</p>
+        </div>
+        <span class="video-status">
+            <span class="status-dot"></span> Processing
+        </span>
+    </div>
+
+    <img
+        src="http://127.0.0.1:8000/video-feed"
+        alt="RoadSense YOLO vehicle detection video"
+        class="road-video"
+    >
+</div>
+
+
+            <div class="section-heading">
+                <div><h2>Road status</h2><p>Demo values · Not live vehicle telemetry</p></div>
+                <span class="pill amber">SIMULATED DEMO</span>
+            </div>
+
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <span class="stat-label">Prototype risk level</span>
+                    <div class="stat-value red-text" id="overview-risk">HIGH</div>
+                    <span class="stat-foot">Demo baseline classification</span>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-label">Vehicle speed</span>
+                    <div class="stat-value">62 <small>km/h</small></div>
+                    <span class="stat-foot">Simulated reading</span>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-label">Detected vehicles</span>
+                    <div class="stat-value" id="overview-vehicles">1</div>
+                    <span class="stat-foot">Demo value · CV can vary</span>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-label">Reference risk zone</span>
+                    <div class="stat-value">300 <small>m</small></div>
+                    <span class="stat-foot">Prototype reference length</span>
+                </article>
+            </div>
+
+            
+<div class="stats-grid">
+    <article class="stat-card">
+        <span class="stat-label">OpenCV frame brightness</span>
+        <div class="stat-value" id="overview-brightness">--</div>
+        <span class="stat-foot">Average grayscale intensity (0–255)</span>
+    </article>
+
+    <article class="stat-card">
+        <span class="stat-label">Visibility estimate</span>
+        <div class="stat-value" id="overview-visibility">Loading...</div>
+        <span class="stat-foot" id="overview-visibility-note">
+            Reading video frame data
+        </span>
+    </article>
+</div>
+
+
+<section class="panel" id="report-history-panel">
+    <div class="panel-heading">
+        <div>
+            <span class="panel-icon">📋</span>
+            <h3>Saved Road Reports</h3>
+        </div>
+        <button id="refresh-reports" type="button">Refresh</button>
+    </div>
+
+    <p class="muted" id="report-history-status">
+        Loading saved reports...
+    </p>
+
+    <div id="report-history-list"></div>
+</section>
+
+
+
+            <div class="content-grid">
+                <article class="panel accident-panel">
+                    <div class="panel-heading">
+                        <div><span class="panel-icon red-bg">!</span><h3>Accident-prone area</h3></div>
+                        <span class="pill red">CAUTION</span>
+                    </div>
+                    <h2>Guntur Y-Junction</h2>
+                    <p class="muted">NH-16 · Guntur, Andhra Pradesh</p>
+                    <div class="risk-strip"><span></span><span></span><span></span><span></span></div>
+                    <div class="risk-caption"><span>Prototype alert level</span><strong>HIGH</strong></div>
+                    <p class="body-copy">Treat the junction as a caution point in this demonstration. Reduce speed when appropriate, maintain a safe following distance, watch for merging traffic and follow posted road signs.</p>
+                    <button class="text-btn" data-goto="map-page">Explore safety map →</button>
+                    <p class="tiny-note">The 300 m value is a reference zone length, not a surveyed boundary or live distance measurement.</p>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div><span class="panel-icon teal-bg">✓</span><h3>Safety measures</h3></div>
+                    </div>
+                    <div class="recommendation">
+                        <span class="number">01</span>
+                        <div><strong>Manage your speed</strong><p>Follow the posted speed limit and slow down when conditions require.</p></div>
+                    </div>
+                    <div class="recommendation">
+                        <span class="number">02</span>
+                        <div><strong>Watch merging traffic</strong><p>Scan both sides and avoid sudden lane changes near junctions.</p></div>
+                    </div>
+                    <div class="recommendation">
+                        <span class="number">03</span>
+                        <div><strong>Increase visibility</strong><p>Use suitable lighting and extra caution at night or in glare.</p></div>
+                    </div>
+                    <button class="text-btn" data-goto="safety">View safety analysis →</button>
+                </article>
+            </div>
+        </section>
+
+        <!-- SAFETY MEASURES -->
+        <section class="page" id="safety">
+            <div class="page-intro">
+                <h2>Safety analysis</h2>
+                <p>Review the demo conditions, get practical guidance and optionally request a prediction from the backend.</p>
+            </div>
+
+            <div class="content-grid">
+                <article class="panel">
+                    <h3>Road conditions</h3>
+                    <p class="muted">Edit the values to explore the prototype.</p>
+
+                    <label for="speed">Vehicle speed (km/h)</label>
+                    <input id="speed" type="number" min="0" max="250" value="62">
+
+                    <label for="speed-limit">Reference speed limit (km/h)</label>
+                    <input id="speed-limit" type="number" min="1" max="200" value="60">
+
+                    <label for="distance">Distance to reference zone (m)</label>
+                    <input id="distance" type="number" min="0" value="300">
+
+                    <label for="night">Lighting condition</label>
+                    <select id="night">
+                        <option value="false">Daytime</option>
+                        <option value="true" selected>Night-time</option>
+                    </select>
+
+                    <label for="glare">Headlight glare</label>
+                    <select id="glare">
+                        <option>LOW</option>
+                        <option selected>MEDIUM</option>
+                        <option>HIGH</option>
+                    </select>
+
+                    <label for="vehicles">Vehicles detected</label>
+                    <input id="vehicles" type="number" min="0" max="100" value="1">
+
+                    <div class="button-row">
+                        <button class="primary-btn" id="analyze-btn">Analyze conditions</button>
+                        <button class="secondary-btn" id="predict-btn">Ask ML backend</button>
+                    </div>
+                    <p class="tiny-note">These are user-entered demo values, not live sensor readings.</p>
+                </article>
+
+                <article class="panel result-panel">
+                    <span class="eyebrow">ANALYSIS RESULT</span>
+                    <div class="result-level" id="safety-risk">HIGH</div>
+                    <p id="result-description">Review the road conditions and use caution.</p>
+                    <div id="recommendations" class="recommendation-list"></div>
+                    <div class="api-result" id="api-result">ML backend has not been queried yet.</div>
+                </article>
+            </div>
+        </section>
+
+        <!-- SAFETY MAP -->
+        <section class="page" id="map-page">
+            <div class="page-intro">
+                <h2>Safety map</h2>
+                <p>Illustrative map around Guntur Y-Junction. Markers and circles are prototype visualizations.</p>
+            </div>
+            <div class="panel map-panel">
+                <div class="panel-heading">
+                    <div><h3>Guntur · NH-16</h3><p class="muted">Approximate demo coordinates</p></div>
+                    <span class="pill red">CAUTION ZONE</span>
+                </div>
+                
+<div class="button-row">
+    <button class="primary-btn" id="nearest-ev-route-btn" type="button">
+        ⚡ Find Nearest EV & Show Route
+    </button>
+</div>
+<p class="tiny-note">
+    Uses your browser location. Allow location access to calculate the route.
+</p>
+
+                <div id="safety-map"></div>
+                <div class="map-legend">
+                    <span><i class="legend-dot danger"></i> Reference risk point</span>
+                    <span><i class="legend-dot safe"></i> EV station</span>
+                </div>
+                <p class="tiny-note">Map location is approximate. This is not a live GPS feed, official crash map or verified risk-zone perimeter.</p>
+            </div>
+        </section>
+
+        <!-- EV STATIONS -->
+        <section class="page" id="ev-page">
+            <div class="page-intro">
+                <h2>EV charging stations</h2>
+                <p>Prototype station records. Confirm availability, connector compatibility and opening status before travelling.</p>
+            </div>
+            <div class="station-grid" id="ev-stations"></div>
+        </section>
+
+        <!-- PETROL STATIONS -->
+        <section class="page" id="petrol-page">
+            <div class="page-intro">
+                <h2>Petrol stations</h2>
+                <p>Reference station list for the Guntur demo area.</p>
+            </div>
+            <div class="notice">
+                <strong>Location data limitation</strong>
+                <p>Coordinates are not currently available for these petrol station records, so the dashboard cannot reliably calculate the nearest petrol station or plot these stations on the map.</p>
+            </div>
+            <div class="station-grid" id="petrol-stations"></div>
+        </section>
+
+        <footer>RoadSense · Prototype for demonstration purposes · Not a substitute for official road guidance</footer>
+    </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
