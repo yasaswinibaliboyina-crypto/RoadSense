@@ -1,7 +1,7 @@
 
-import os
-import sys
 
+import sys
+import os
 import joblib
 import pandas as pd
 
@@ -11,6 +11,7 @@ from backend.video_stream import router as video_router
 from fastapi.middleware.cors import CORSMiddleware
 from backend.aws_storage import save_road_report
 from backend.report_history import save_local_report, get_local_reports
+from backend import video_stream
 
 # ----------------------------------------
 # Project paths
@@ -107,6 +108,8 @@ def home():
 def predict_risk(request: RiskRequest):
 
     glare = request.glare.upper()
+
+    
 
     if glare not in GLARE_MAP:
         raise HTTPException(
@@ -278,25 +281,99 @@ def aws_test_report():
     return save_road_report(sample_report)
 
 
-@app.post("/save-local-report")
-def save_report():
-    sample_report = {
-        "project": "RoadSense",
-        "source": "local_test",
-        "brightness": 40.8,
-        "visibility_estimate": "LOW LIGHT",
-        "vehicle_count": 1,
-        "risk_level": "HIGH"
-    }
-
-    return save_local_report(sample_report)
-
-
 @app.get("/report-history")
 def report_history():
     return {
-        "total_reports": len(get_local_reports()),
         "reports": get_local_reports()
     }
 
 
+
+
+@app.post("/save-local-report")
+def save_report(request: RiskRequest | None = None):
+    sample_report = {
+        "project": "RoadSense",
+        "source": "live_video_detection",
+        "brightness": video_stream.latest_brightness,
+        "visibility_estimate": video_stream.latest_visibility_estimate,
+        "vehicle_count": video_stream.latest_vehicle_count,
+        "risk_level": "NOT_CALCULATED",
+        "risk_prediction_source": None,
+        "risk_inputs": None
+    }
+
+    # Calculate risk only when dashboard inputs are supplied.
+    if request is not None:
+        glare = request.glare.upper()
+
+        if glare not in GLARE_MAP:
+            raise HTTPException(
+                status_code=400,
+                detail="glare must be LOW, MEDIUM or HIGH"
+            )
+
+        road_row = roads[
+            roads["location_name"] == "Guntur Y-Junction"
+        ]
+
+        if road_row.empty:
+            raise HTTPException(
+                status_code=500,
+                detail="Guntur Y-Junction road-risk data is missing"
+            )
+
+        road = road_row.iloc[0]
+
+        features = pd.DataFrame([{
+            "road_risk": ROAD_RISK_MAP[str(road["risk_level"]).upper()],
+            "speed": request.speed,
+            "speed_limit": request.speed_limit,
+            "distance_to_risk_zone": request.distance_to_risk_zone,
+            "night": int(request.night),
+            "glare": GLARE_MAP[glare],
+            "vehicles": request.vehicles_detected
+        }])
+
+        prediction = model.predict(features)
+        risk = str(label_encoder.inverse_transform(prediction)[0])
+
+        sample_report.update({
+            "risk_level": risk,
+            "risk_prediction_source": "XGBoost",
+            "risk_inputs": {
+                "speed_kmph": request.speed,
+                "speed_limit_kmph": request.speed_limit,
+                "distance_to_risk_zone_m": request.distance_to_risk_zone,
+                "night": request.night,
+                "glare": glare,
+                "vehicles_detected": request.vehicles_detected,
+                "input_note": (
+                    "Speed and distance are supplied prototype inputs; "
+                    "they are not measured by the camera."
+                )
+            }
+        })
+
+    # Preserve local report history.
+    local_result = save_local_report(sample_report)
+
+    # Upload the same report to AWS S3.
+  
+
+
+    if os.getenv("ROADSENSE_USE_AWS", "false").lower() == "true":
+        aws_result = save_road_report(sample_report)
+    else:
+        aws_result = {
+            "saved": False,
+            "message": "AWS upload disabled; report saved locally."
+        }
+
+    return {
+        "report": sample_report,
+        "local": local_result,
+        "aws": aws_result,
+        "saved_locally": local_result.get("saved", False),
+        "saved_to_aws": aws_result.get("saved", False)
+    }

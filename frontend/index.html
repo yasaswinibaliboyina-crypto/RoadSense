@@ -219,10 +219,13 @@
                     <label for="vehicles">Vehicles detected</label>
                     <input id="vehicles" type="number" min="0" max="100" value="1">
 
-                    <div class="button-row">
-                        <button class="primary-btn" id="analyze-btn">Analyze conditions</button>
-                        <button class="secondary-btn" id="predict-btn">Ask ML backend</button>
-                    </div>
+                        
+<div class="button-row">
+    <button class="primary-btn" id="analyze-btn" type="button">Analyze conditions</button>
+    <button class="secondary-btn" id="predict-btn" type="button">Ask ML backend</button>
+    <button class="secondary-btn" id="save-report-btn" type="button">Save Report</button>
+</div>
+
                     <p class="tiny-note">These are user-entered demo values, not live sensor readings.</p>
                 </article>
 
@@ -248,11 +251,17 @@
                     <span class="pill red">CAUTION ZONE</span>
                 </div>
                 
+
 <div class="button-row">
-    <button class="primary-btn" id="nearest-ev-route-btn" type="button">
-        ⚡ Find Nearest EV & Show Route
+    <button
+        class="primary-btn"
+        id="nearest-ev-route-btn"
+        type="button"
+    >
+        ⚡ Find Nearest EV &amp; Show Route
     </button>
 </div>
+
 <p class="tiny-note">
     Uses your browser location. Allow location access to calculate the route.
 </p>

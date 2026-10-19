@@ -1,6 +1,6 @@
 const API_BASE = "http://127.0.0.1:8000";
 
-const stations = {
+ const stations= {
     ev: [
         { name: "IOCL NH-16 Charger", location: "Near Ankireddypalem Y-Junction", connector: "LEV AC", power: "3.3 kW", lat: 16.269778, lon: 80.466302 },
         { name: "Ather Kothapet", location: "Kothapet, Guntur", connector: "LEV DC", power: "3.3 kW", lat: 16.296253, lon: 80.449571 },
@@ -712,4 +712,64 @@ document.getElementById("refresh-reports")?.addEventListener(
 );
 
 loadReportHistory();
+
+
+document.getElementById("save-report-btn")?.addEventListener("click", async () => {
+    const button = document.getElementById("save-report-btn");
+    button.disabled = true;
+    button.textContent = "Saving report...";
+
+    try {
+        const speed = Number(document.getElementById("speed").value);
+        const speedLimit = Number(document.getElementById("speed-limit").value);
+        const distance = Number(document.getElementById("distance").value);
+        const night = document.getElementById("night").value === "true";
+        const glare = document.getElementById("glare").value;
+        const vehicles = Number(document.getElementById("vehicles").value);
+
+        const payload = {
+            speed,
+            speed_limit: speedLimit,
+            distance_to_risk_zone: distance,
+            night,
+            glare,
+            vehicles_detected: vehicles,
+            latitude: 16.3280,
+            longitude: 80.4839
+        };
+
+        const response = await fetch(
+            "https://rayaqac46hmtraawhkqfpnammi0bslyt.lambda-url.ap-south-1.on.aws/",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            } 
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.saved) {
+            throw new Error(data.error || data.detail || `HTTP ${response.status}`);
+        }
+
+        const awsStatus = "AWS S3 upload successful";
+
+        showToast(
+            `Report saved. Risk: ${payload.risk_level ?? "Unknown"}. Saved to AWS S3.`
+        );
+
+        const resultBox = document.getElementById("api-result");
+        if (resultBox) {
+            resultBox.textContent = JSON.stringify(data, null, 2);
+        }
+    } catch (error) {
+        console.error("Save report failed:", error);
+        showToast("Could not save report: " + error.message);
+    } finally {
+        button.disabled = false;
+        button.textContent = "Save Report";
+    }
+});
+
 

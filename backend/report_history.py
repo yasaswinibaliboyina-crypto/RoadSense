@@ -28,10 +28,26 @@ def save_local_report(report: dict) -> dict:
             "report": report,
         }
 
+        
         reports.append(entry)
 
+        # Back up the existing history before updating it
+        if HISTORY_FILE.exists():
+            backup_file = HISTORY_FILE.with_name(
+                "road_report_history.backup.json"
+            )
+
+            with HISTORY_FILE.open("r", encoding="utf-8") as source:
+                existing_data = json.load(source)
+
+            if isinstance(existing_data, list):
+                with backup_file.open("w", encoding="utf-8") as backup:
+                    json.dump(existing_data, backup, indent=2)
+
+        # Save the updated report history
         with HISTORY_FILE.open("w", encoding="utf-8") as file:
             json.dump(reports, file, indent=2)
+
 
         return {
             "saved": True,
