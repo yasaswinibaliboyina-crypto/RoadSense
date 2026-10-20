@@ -1,0 +1,12 @@
+
+fastapi
+uvicorn[standard]
+pydantic
+joblib
+pandas
+scikit-learn
+scipy
+xgboost
+opencv-python-headless
+ultralytics
+boto3
