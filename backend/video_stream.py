@@ -10,10 +10,10 @@ latest_brightness = 0.0
 latest_visibility_estimate = "UNKNOWN"
 
 model = YOLO("yolo26n.pt")
-video_path = (
-    r"C:\Users\balib\OneDrive\Desktop\RoadSense"
-    r"\opencv\road.mp4"
-)
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+video_path = str(BASE_DIR / "opencv" / "road.mp4")
 
 latest_vehicle_count = 0
 
