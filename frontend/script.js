@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://roadsense-s868.onrender.com";
 
  const stations= {
     ev: [
@@ -686,13 +686,17 @@ async function loadReportHistory() {
             card.className = "report-history-card";
 
             const heading = document.createElement("h4");
-            heading.textContent = `Risk Level: ${item.report.risk_level}`;
+            
+            heading.textContent =
+                `Risk Level: ${item.report?.risk_level ?? item.risk_level ?? "Unknown"}`;
 
             const details = document.createElement("p");
+            const report = item.report ?? item;
+
             details.textContent =
-                `Visibility: ${item.report.visibility_estimate} | ` +
-                `Brightness: ${item.report.brightness} | ` +
-                `Vehicles: ${item.report.vehicle_count}`;
+                `Visibility: ${report.visibility_estimate ?? "N/A"} | ` +
+                `Brightness: ${report.brightness ?? "N/A"} | ` +
+                `Vehicles: ${report.vehicle_count ?? report.vehicles_detected ?? "N/A"}`;            
 
             const date = document.createElement("small");
             date.textContent = new Date(item.created_at).toLocaleString();
@@ -763,7 +767,7 @@ document.getElementById("save-report-btn")?.addEventListener("click", async () =
         if (resultBox) {
             resultBox.textContent = JSON.stringify(data, null, 2);
         }
-    } catch (error) {
+     } catch (error) {
         console.error("Save report failed:", error);
         showToast("Could not save report: " + error.message);
     } finally {
