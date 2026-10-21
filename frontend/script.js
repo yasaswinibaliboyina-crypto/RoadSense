@@ -665,8 +665,7 @@ async function loadReportHistory() {
     const list = document.getElementById("report-history-list");
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/report-history");
-
+        const response = await fetch(`${API_BASE}/report-history`);
         if (!response.ok) {
             throw new Error("Could not load report history");
         }
