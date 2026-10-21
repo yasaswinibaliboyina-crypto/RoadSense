@@ -620,11 +620,11 @@ if (nearestEVButton) {
     }
 
     async function refreshVisibility() {
-        try {
-            const response = await fetch(
-                "http://127.0.0.1:8000/visibility",
-                { cache: "no-store" }
-            );
+    try {
+        const response = await fetch(
+            `${API_BASE}/visibility`,
+            { cache: "no-store" }
+        );
 
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
